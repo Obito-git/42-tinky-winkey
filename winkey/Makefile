@@ -1,18 +1,20 @@
 NAME = winkey.exe
 CC = C:\build_vs.bat
-CFLAGS = /Wall /WX /Iinc
-SRCS = src/main.c src/file2.c
+#CFLAGS = /Wall /WX /Iinc
+CFLAGS = /Wall /Iinc
+LDFLAGS = user32.lib kernel32.lib
+SRCS = src/main.c src/log.c
 OBJS = $(SRCS:src/%.c=obj/%.obj)
 
 all: obj $(NAME)
 
 $(NAME): $(OBJS)
-        $(CC) $(CFLAGS) $(OBJS) /Fe$@
+        $(CC) $(CFLAGS) $(OBJS) /Fe$@ $(LDFLAGS)
 
 obj:
         @if not exist obj mkdir obj
 
-./obj/%.obj: ./src/%.c obj
+obj/%.obj: src/%.c | obj
         $(CC) $(CFLAGS) /c /Fo$@ $<
 
 clean:

