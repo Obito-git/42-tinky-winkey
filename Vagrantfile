@@ -20,7 +20,7 @@ Vagrant.configure("2") do |config|
     [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
     iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 
-    # Install Visual Studio 2022 Build Tools for C compilation
+    # Install vscode to be able to use cl compiler 
     choco install visualstudio2022buildtools --version=17.4.5.1 -y
     choco install visualstudio2022-workload-vctools -y
     choco install drmemory -y
@@ -31,13 +31,9 @@ Vagrant.configure("2") do |config|
     $env:Path += ';' + $clPath
     [Environment]::SetEnvironmentVariable('Path', $env:Path, [EnvironmentVariableTarget]::Machine)
 
-    # TODO: rename batch name
-    $script = '@echo on
-    set currPath=%cd%
-    call "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Auxiliary\\Build\\vcvars64.bat"
-    cd %currPath%
-    set PreferredToolArchitecture=x64
-    cl %*' | Out-File 'C:\\build_vs.bat' -Encoding Ascii
-  
+    # Add env vars for make cl detecs libs
+    setx INCLUDE "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.41.34120\\include;C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.22621.0\\ucrt;C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.22621.0\\shared;C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.22621.0\\um;C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.22621.0\\winrt"
+    setx LIB "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.41.34120\\lib\\x64;C:\\Program Files (x86)\\Windows Kits\\10\\Lib\\10.0.22621.0\\ucrt\\x64;C:\\Program Files (x86)\\Windows Kits\\10\\Lib\\10.0.22621.0\\um\\x64"
+
   SHELL
 end

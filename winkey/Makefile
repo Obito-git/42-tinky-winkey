@@ -1,5 +1,5 @@
 NAME = winkey.exe
-CC = C:\build_vs.bat
+CC = cl
 #CFLAGS = /Wall /WX /Iinc
 CFLAGS = /Wall /Iinc
 LDFLAGS = user32.lib kernel32.lib

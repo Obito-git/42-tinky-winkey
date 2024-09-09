@@ -48,7 +48,6 @@ void LogKeyName(DWORD vkCode, void (*log)(char *))
         case BACKSPACE_CHAR:
             res = "\\b";
             break;
-
         case '\t':
             res = "\\t";
             break;
